@@ -1,7 +1,10 @@
 package in.yash.UberApplication.strategies;
 
 import in.yash.UberApplication.dto.RideRequestDto;
+import in.yash.UberApplication.entities.RideRequest;
 
 public interface RideFairCalculationStrategy {
-    double calculateFare(RideRequestDto rideRequestDto);
+
+    double RIDE_FARE_MULTIPLIER=10;
+    double calculateFare(RideRequest rideRequest);
 }
