@@ -13,6 +13,7 @@ import in.yash.UberApplication.services.RiderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -35,12 +36,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public UserDto signUp(SignUpDto signUpDto) {
-        userRepository.findByEmail(signUpDto.getEmail()).orElseThrow(
-                ()-> new RuntimeConflictException("Cannot signup, User already exits with email "+signUpDto.getEmail()));
-        User user=modelMapper.map(signUpDto, User.class);
-        user.setRoles(Set.of(Role.RIDER));
-        User savedUser=userRepository.save(user);
+        User user=userRepository.findByEmail(signUpDto.getEmail()).orElse(null);
+        if(user!=null){
+            throw new RuntimeConflictException("Cannot signup, User already exits with email "+signUpDto.getEmail());
+        }
+        User mappedUser=modelMapper.map(signUpDto, User.class);
+        mappedUser.setRoles(Set.of(Role.RIDER));
+        User savedUser=userRepository.save(mappedUser);
 
         //create user related entities
         Rider rider=riderService.createNewRider(savedUser);

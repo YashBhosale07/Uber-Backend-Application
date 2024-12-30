@@ -1,6 +1,4 @@
 package in.yash.UberApplication.strategies.Impl;
-
-import in.yash.UberApplication.dto.RideRequestDto;
 import in.yash.UberApplication.entities.RideRequest;
 import in.yash.UberApplication.services.DistanceService;
 import in.yash.UberApplication.strategies.RideFairCalculationStrategy;
