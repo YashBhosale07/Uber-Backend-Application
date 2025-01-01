@@ -1,7 +1,6 @@
 package in.yash.UberApplication.advices;
 
-import in.yash.UberApplication.exceptions.ResourceNotFoundException;
-import in.yash.UberApplication.exceptions.RuntimeConflictException;
+import in.yash.UberApplication.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +26,35 @@ public class GlobalExceptionHandler {
                 .build();
         return buildErrorResponseEntity(apiError);
     }
+
+    @ExceptionHandler(RideRequestNotAcceptedException.class)
+    public ResponseEntity<ApiResponse<?>>handleRideRequestNotAcceptedException(RideRequestNotAcceptedException rideRequestNotAcceptedException){
+        ApiError apiError=ApiError.builder()
+                .httpStatus(HttpStatus.NOT_ACCEPTABLE)
+                .message(rideRequestNotAcceptedException.getMessage())
+                .build();
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(DriverNotAvailableForRideException.class)
+    public ResponseEntity<ApiResponse<?>>handleDriverNotAvailableForRideException(DriverNotAvailableForRideException driverNotAvailableForRideException){
+        ApiError apiError=ApiError.builder()
+                .httpStatus(HttpStatus.BAD_GATEWAY)
+                .message(driverNotAvailableForRideException.getMessage())
+                .build();
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(OtpInvalidException.class)
+    public ResponseEntity<ApiResponse<?>>handleOtpInvalidException(OtpInvalidException otpInvalidException){
+        ApiError apiError=ApiError.builder()
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .message(otpInvalidException.getMessage())
+                .build();
+        return buildErrorResponseEntity(apiError);
+    }
+
+
 
     private ResponseEntity<ApiResponse<?>> buildErrorResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(new ApiResponse<>(apiError),apiError.getHttpStatus());

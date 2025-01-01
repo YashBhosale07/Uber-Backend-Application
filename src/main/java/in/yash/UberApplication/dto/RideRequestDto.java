@@ -1,6 +1,4 @@
 package in.yash.UberApplication.dto;
-
-import in.yash.UberApplication.entities.Rider;
 import in.yash.UberApplication.entities.enums.PaymentMethod;
 import in.yash.UberApplication.entities.enums.RideRequestStatus;
 import lombok.AllArgsConstructor;
@@ -22,7 +20,9 @@ public class RideRequestDto {
 
     private LocalDateTime requestTime;
 
-    private Rider rider;
+    private Double fare;
+
+    private RiderDto rider;
 
     private PaymentMethod paymentMethod;
 

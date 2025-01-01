@@ -2,6 +2,7 @@ package in.yash.UberApplication.entities;
 
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import in.yash.UberApplication.entities.enums.PaymentMethod;
 import in.yash.UberApplication.entities.enums.RideStatus;
 import jakarta.persistence.*;
@@ -28,9 +29,11 @@ public class Ride {
     private LocalDateTime createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Rider rider;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Driver driver;
 
     @Enumerated(EnumType.STRING)
@@ -39,11 +42,13 @@ public class Ride {
     @Enumerated(EnumType.STRING)
     private RideStatus rideStatus;
 
-    private Double fair;
+    private Double fare;
 
     private LocalDateTime startedAt;
 
     private LocalDateTime endedAt;
+
+    private String otp;
 
 
 }

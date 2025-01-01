@@ -1,5 +1,6 @@
 package in.yash.UberApplication.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.locationtech.jts.geom.Point;
@@ -14,6 +15,7 @@ public class Driver {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     private Boolean available;

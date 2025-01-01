@@ -1,31 +1,31 @@
 package in.yash.UberApplication.dto;
 
-import in.yash.UberApplication.entities.Driver;
 import in.yash.UberApplication.entities.enums.PaymentMethod;
 import in.yash.UberApplication.entities.enums.RideStatus;
-import org.locationtech.jts.geom.Point;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Data
 public class RideDto {
 
     private Long id;
 
-    private Point pickUpLocation;
+    private PointDto pickUpLocation;
 
-    private Point dropOffLocation;
+    private PointDto dropOffLocation;
 
     private LocalDateTime createdTime;
 
     private RiderDto rider;
 
-    private Driver driver;
+    private DriverDto driver;
 
     private PaymentMethod paymentMethod;
 
     private RideStatus rideStatus;
 
-    private Double fair;
+    private Double fare;
 
     private LocalDateTime startedAt;
 

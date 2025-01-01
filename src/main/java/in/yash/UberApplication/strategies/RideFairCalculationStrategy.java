@@ -1,6 +1,5 @@
 package in.yash.UberApplication.strategies;
 
-import in.yash.UberApplication.dto.RideRequestDto;
 import in.yash.UberApplication.entities.RideRequest;
 
 public interface RideFairCalculationStrategy {
