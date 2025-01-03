@@ -4,14 +4,16 @@ import in.yash.UberApplication.dto.DriverDto;
 import in.yash.UberApplication.dto.RideDto;
 import in.yash.UberApplication.dto.RideRequestDto;
 import in.yash.UberApplication.dto.RiderDto;
-import in.yash.UberApplication.entities.Driver;
-import in.yash.UberApplication.entities.RideRequest;
-import in.yash.UberApplication.entities.Rider;
-import in.yash.UberApplication.entities.User;
+import in.yash.UberApplication.entities.*;
 import in.yash.UberApplication.entities.enums.RideRequestStatus;
+import in.yash.UberApplication.entities.enums.RideStatus;
 import in.yash.UberApplication.exceptions.ResourceNotFoundException;
+import in.yash.UberApplication.exceptions.RideException;
+import in.yash.UberApplication.repositories.DriverRepository;
 import in.yash.UberApplication.repositories.RideRequestRepository;
 import in.yash.UberApplication.repositories.RiderRepository;
+import in.yash.UberApplication.services.DriverService;
+import in.yash.UberApplication.services.RideService;
 import in.yash.UberApplication.services.RiderService;
 import in.yash.UberApplication.strategies.RideStrategyManager;
 import org.modelmapper.ModelMapper;
@@ -35,6 +37,12 @@ public class RiderServiceImpl implements RiderService {
     @Autowired
     private RiderRepository riderRepository;
 
+    @Autowired
+    private RideService rideService;
+
+    @Autowired
+    private DriverService driverService;
+
     @Override
     @Transactional
     public RideRequestDto requestRide(RideRequestDto rideRequestDto) {
@@ -53,7 +61,17 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public RideDto cancelRide(Long rideId) {
-        return null;
+        Rider rider=getCurrentRider();
+        Ride ride=rideService.getRideById(rideId);
+        if(!ride.equals(ride.getRider())){
+            throw new RideException("Ride does not own this ride");
+        }
+        if(!ride.getRideStatus().equals(RideStatus.CONFIRMED)){
+            throw new RideException("Ride cannot be cancelled");
+        }
+       rideService.updateRideStatus(ride,RideStatus.CANCELLED);
+        driverService.updateDriverAvailability(ride.getDriver(),true);
+        return modelMapper.map(ride,RideDto.class);
     }
 
     @Override

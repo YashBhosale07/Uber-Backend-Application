@@ -32,11 +32,6 @@ public class RideServiceImpl implements RideService {
     }
 
     @Override
-    public void matchWithDriver(RideRequestDto rideRequestDto) {
-
-    }
-
-    @Override
     public Ride createNewRide(RideRequest rideRequest, Driver driver) {
         rideRequest.setRideRequestStatus(RideRequestStatus.CONFIRMED);
         Ride ride=modelMapper.map(rideRequest,Ride.class);
@@ -62,6 +57,7 @@ public class RideServiceImpl implements RideService {
 
     @Override
     public Page<Ride> getAllRidesOfDriver(Long driverId, PageRequest pageRequest) {
+
         return null;
     }
 

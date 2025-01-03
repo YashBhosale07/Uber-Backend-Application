@@ -54,6 +54,14 @@ public class GlobalExceptionHandler {
         return buildErrorResponseEntity(apiError);
     }
 
+    @ExceptionHandler(RideException.class)
+    public ResponseEntity<ApiResponse<?>>handleRideException(RideException rideException){
+        ApiError apiError=ApiError.builder()
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .message(rideException.getMessage())
+                .build();
+        return buildErrorResponseEntity(apiError);
+    }
 
 
     private ResponseEntity<ApiResponse<?>> buildErrorResponseEntity(ApiError apiError) {
