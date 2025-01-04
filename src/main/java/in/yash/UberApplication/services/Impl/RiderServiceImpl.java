@@ -18,6 +18,8 @@ import in.yash.UberApplication.services.RiderService;
 import in.yash.UberApplication.strategies.RideStrategyManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,8 +57,7 @@ public class RiderServiceImpl implements RiderService {
         RideRequest savedRideRequest=rideRequestRepository.save(rideRequest);
        List<Driver>nearByDrivers= rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDriver(rideRequest);
        //TODO send notification to all the drivers about this ride request
-        RideRequestDto responseDto= modelMapper.map(savedRideRequest,RideRequestDto.class);
-        return responseDto;
+        return modelMapper.map(savedRideRequest,RideRequestDto.class);
     }
 
     @Override
@@ -81,12 +82,17 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public RiderDto getMyProfile() {
-        return null;
+        Rider currentRider=getCurrentRider();
+        return modelMapper.map(currentRider,RiderDto.class);
     }
 
     @Override
-    public List<RideDto> getMyAllRides() {
-        return null;
+    public Page<RideDto> getMyAllRides(PageRequest pageRequest) {
+        Rider currentRider=getCurrentRider();
+        return rideService.getAllRidesOfRider(currentRider,pageRequest).map(
+                ride->modelMapper.map(ride,RideDto.class)
+        );
+
     }
 
     @Override

@@ -1,9 +1,10 @@
 package in.yash.UberApplication.services.Impl;
 
-import in.yash.UberApplication.dto.RideRequestDto;
+
 import in.yash.UberApplication.entities.Driver;
 import in.yash.UberApplication.entities.Ride;
 import in.yash.UberApplication.entities.RideRequest;
+import in.yash.UberApplication.entities.Rider;
 import in.yash.UberApplication.entities.enums.RideRequestStatus;
 import in.yash.UberApplication.entities.enums.RideStatus;
 import in.yash.UberApplication.exceptions.ResourceNotFoundException;
@@ -51,14 +52,13 @@ public class RideServiceImpl implements RideService {
     }
 
     @Override
-    public Page<Ride> getAllRidesOfRider(Long rideId, PageRequest pageRequest) {
-        return null;
+    public Page<Ride> getAllRidesOfRider(Rider rider, PageRequest pageRequest) {
+         return rideRepository.findByRider(rider,pageRequest);
     }
 
     @Override
-    public Page<Ride> getAllRidesOfDriver(Long driverId, PageRequest pageRequest) {
-
-        return null;
+    public Page<Ride> getAllRidesOfDriver(Driver driver, PageRequest pageRequest) {
+        return rideRepository.findByDriver(driver,pageRequest);
     }
 
     private String generateRandomOtp(){

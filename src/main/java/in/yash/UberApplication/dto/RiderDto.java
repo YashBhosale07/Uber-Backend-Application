@@ -8,6 +8,7 @@
     @NoArgsConstructor
     @AllArgsConstructor
     public class RiderDto {
+        private Long rideId;
         private UserDto user;
         private Double rating;
     }
