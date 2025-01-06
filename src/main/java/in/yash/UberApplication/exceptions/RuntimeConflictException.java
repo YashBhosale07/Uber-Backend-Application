@@ -1,6 +1,6 @@
 package in.yash.UberApplication.exceptions;
 
-public class RuntimeConflictException extends RuntimeException{
+public class RuntimeConflictException extends RuntimeException {
     public RuntimeConflictException() {
     }
 

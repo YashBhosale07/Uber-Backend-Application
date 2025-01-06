@@ -7,6 +7,7 @@ import in.yash.UberApplication.dto.UserDto;
 public interface AuthService {
 
     String login(String email, String password);
+
     UserDto signUp(SignUpDto signUpDto);
 
     DriverDto onboardNewDriver(Long userId);

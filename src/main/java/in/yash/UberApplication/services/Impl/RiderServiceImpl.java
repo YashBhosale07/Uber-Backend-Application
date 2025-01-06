@@ -9,7 +9,6 @@ import in.yash.UberApplication.entities.enums.RideRequestStatus;
 import in.yash.UberApplication.entities.enums.RideStatus;
 import in.yash.UberApplication.exceptions.ResourceNotFoundException;
 import in.yash.UberApplication.exceptions.RideException;
-import in.yash.UberApplication.repositories.DriverRepository;
 import in.yash.UberApplication.repositories.RideRequestRepository;
 import in.yash.UberApplication.repositories.RiderRepository;
 import in.yash.UberApplication.services.DriverService;
@@ -24,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 @Service
 public class RiderServiceImpl implements RiderService {
 
@@ -48,31 +48,31 @@ public class RiderServiceImpl implements RiderService {
     @Override
     @Transactional
     public RideRequestDto requestRide(RideRequestDto rideRequestDto) {
-        Rider rider=getCurrentRider();
-        RideRequest rideRequest=modelMapper.map(rideRequestDto,RideRequest.class);
+        Rider rider = getCurrentRider();
+        RideRequest rideRequest = modelMapper.map(rideRequestDto, RideRequest.class);
         rideRequest.setRideRequestStatus(RideRequestStatus.PENDING);
         rideRequest.setRider(rider);
-        double fare=rideStrategyManager.rideFairCalculationStrategy().calculateFare(rideRequest);
+        double fare = rideStrategyManager.rideFairCalculationStrategy().calculateFare(rideRequest);
         rideRequest.setFare(fare);
-        RideRequest savedRideRequest=rideRequestRepository.save(rideRequest);
-       List<Driver>nearByDrivers= rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDriver(rideRequest);
-       //TODO send notification to all the drivers about this ride request
-        return modelMapper.map(savedRideRequest,RideRequestDto.class);
+        RideRequest savedRideRequest = rideRequestRepository.save(rideRequest);
+        List<Driver> nearByDrivers = rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDriver(rideRequest);
+        //TODO send notification to all the drivers about this ride request
+        return modelMapper.map(savedRideRequest, RideRequestDto.class);
     }
 
     @Override
     public RideDto cancelRide(Long rideId) {
-        Rider rider=getCurrentRider();
-        Ride ride=rideService.getRideById(rideId);
-        if(!ride.equals(ride.getRider())){
+        Rider rider = getCurrentRider();
+        Ride ride = rideService.getRideById(rideId);
+        if (!ride.equals(ride.getRider())) {
             throw new RideException("Ride does not own this ride");
         }
-        if(!ride.getRideStatus().equals(RideStatus.CONFIRMED)){
+        if (!ride.getRideStatus().equals(RideStatus.CONFIRMED)) {
             throw new RideException("Ride cannot be cancelled");
         }
-       rideService.updateRideStatus(ride,RideStatus.CANCELLED);
-        driverService.updateDriverAvailability(ride.getDriver(),true);
-        return modelMapper.map(ride,RideDto.class);
+        rideService.updateRideStatus(ride, RideStatus.CANCELLED);
+        driverService.updateDriverAvailability(ride.getDriver(), true);
+        return modelMapper.map(ride, RideDto.class);
     }
 
     @Override
@@ -82,22 +82,22 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public RiderDto getMyProfile() {
-        Rider currentRider=getCurrentRider();
-        return modelMapper.map(currentRider,RiderDto.class);
+        Rider currentRider = getCurrentRider();
+        return modelMapper.map(currentRider, RiderDto.class);
     }
 
     @Override
     public Page<RideDto> getMyAllRides(PageRequest pageRequest) {
-        Rider currentRider=getCurrentRider();
-        return rideService.getAllRidesOfRider(currentRider,pageRequest).map(
-                ride->modelMapper.map(ride,RideDto.class)
+        Rider currentRider = getCurrentRider();
+        return rideService.getAllRidesOfRider(currentRider, pageRequest).map(
+                ride -> modelMapper.map(ride, RideDto.class)
         );
 
     }
 
     @Override
     public Rider createNewRider(User user) {
-        Rider rider=Rider.builder()
+        Rider rider = Rider.builder()
                 .user(user)
                 .rating(0.0)
                 .build();
@@ -106,7 +106,7 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public Rider getCurrentRider() {
-        Rider rider=riderRepository.findById(1l).orElseThrow(()->new ResourceNotFoundException("Rider not found"));
+        Rider rider = riderRepository.findById(1L).orElseThrow(() -> new ResourceNotFoundException("Rider not found"));
         System.out.println(rider);
         return rider;
     }

@@ -1,6 +1,6 @@
 package in.yash.UberApplication.exceptions;
 
-public class OtpInvalidException extends RuntimeException{
+public class OtpInvalidException extends RuntimeException {
     public OtpInvalidException() {
     }
 

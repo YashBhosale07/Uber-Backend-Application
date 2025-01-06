@@ -3,13 +3,16 @@ package in.yash.UberApplication.entities;
 
 import in.yash.UberApplication.entities.enums.Role;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "app_user")
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -21,5 +24,5 @@ public class User {
     private String password;
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.LAZY)
-    private Set<Role>roles;
+    private Set<Role> roles;
 }

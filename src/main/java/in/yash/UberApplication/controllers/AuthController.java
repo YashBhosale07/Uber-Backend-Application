@@ -17,7 +17,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/signUp")
-    UserDto signUp(@RequestBody SignUpDto signUpDto){
+    UserDto signUp(@RequestBody SignUpDto signUpDto) {
         return authService.signUp(signUpDto);
     }
 

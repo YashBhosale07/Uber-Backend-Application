@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponse<?>>handleResourceNotException(ResourceNotFoundException resourceNotFoundException){
-        ApiError apiError=ApiError.builder()
+    public ResponseEntity<ApiResponse<?>> handleResourceNotException(ResourceNotFoundException resourceNotFoundException) {
+        ApiError apiError = ApiError.builder()
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .message(resourceNotFoundException.getMessage())
                 .build();
@@ -19,8 +19,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeConflictException.class)
-    public ResponseEntity<ApiResponse<?>>handleRuntimeConflictException(RuntimeConflictException runtimeConflictException){
-        ApiError apiError=ApiError.builder()
+    public ResponseEntity<ApiResponse<?>> handleRuntimeConflictException(RuntimeConflictException runtimeConflictException) {
+        ApiError apiError = ApiError.builder()
                 .httpStatus(HttpStatus.CONFLICT)
                 .message(runtimeConflictException.getMessage())
                 .build();
@@ -28,8 +28,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RideRequestNotAcceptedException.class)
-    public ResponseEntity<ApiResponse<?>>handleRideRequestNotAcceptedException(RideRequestNotAcceptedException rideRequestNotAcceptedException){
-        ApiError apiError=ApiError.builder()
+    public ResponseEntity<ApiResponse<?>> handleRideRequestNotAcceptedException(RideRequestNotAcceptedException rideRequestNotAcceptedException) {
+        ApiError apiError = ApiError.builder()
                 .httpStatus(HttpStatus.NOT_ACCEPTABLE)
                 .message(rideRequestNotAcceptedException.getMessage())
                 .build();
@@ -37,8 +37,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DriverNotAvailableForRideException.class)
-    public ResponseEntity<ApiResponse<?>>handleDriverNotAvailableForRideException(DriverNotAvailableForRideException driverNotAvailableForRideException){
-        ApiError apiError=ApiError.builder()
+    public ResponseEntity<ApiResponse<?>> handleDriverNotAvailableForRideException(DriverNotAvailableForRideException driverNotAvailableForRideException) {
+        ApiError apiError = ApiError.builder()
                 .httpStatus(HttpStatus.BAD_GATEWAY)
                 .message(driverNotAvailableForRideException.getMessage())
                 .build();
@@ -46,8 +46,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(OtpInvalidException.class)
-    public ResponseEntity<ApiResponse<?>>handleOtpInvalidException(OtpInvalidException otpInvalidException){
-        ApiError apiError=ApiError.builder()
+    public ResponseEntity<ApiResponse<?>> handleOtpInvalidException(OtpInvalidException otpInvalidException) {
+        ApiError apiError = ApiError.builder()
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .message(otpInvalidException.getMessage())
                 .build();
@@ -55,8 +55,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RideException.class)
-    public ResponseEntity<ApiResponse<?>>handleRideException(RideException rideException){
-        ApiError apiError=ApiError.builder()
+    public ResponseEntity<ApiResponse<?>> handleRideException(RideException rideException) {
+        ApiError apiError = ApiError.builder()
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .message(rideException.getMessage())
                 .build();
@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
 
 
     private ResponseEntity<ApiResponse<?>> buildErrorResponseEntity(ApiError apiError) {
-        return new ResponseEntity<>(new ApiResponse<>(apiError),apiError.getHttpStatus());
+        return new ResponseEntity<>(new ApiResponse<>(apiError), apiError.getHttpStatus());
 
     }
 

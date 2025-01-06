@@ -1,6 +1,6 @@
 package in.yash.UberApplication.exceptions;
 
-public class DriverNotAvailableForRideException extends RuntimeException{
+public class DriverNotAvailableForRideException extends RuntimeException {
 
     public DriverNotAvailableForRideException() {
     }

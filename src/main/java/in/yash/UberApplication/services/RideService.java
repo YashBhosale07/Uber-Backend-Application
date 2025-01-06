@@ -1,7 +1,6 @@
 package in.yash.UberApplication.services;
 
 
-import in.yash.UberApplication.dto.RideRequestDto;
 import in.yash.UberApplication.entities.Driver;
 import in.yash.UberApplication.entities.Ride;
 import in.yash.UberApplication.entities.RideRequest;
@@ -20,7 +19,7 @@ public interface RideService {
 
     Page<Ride> getAllRidesOfRider(Rider rider, PageRequest pageRequest);
 
-    Page<Ride>getAllRidesOfDriver(Driver driver, PageRequest pageRequest);
+    Page<Ride> getAllRidesOfDriver(Driver driver, PageRequest pageRequest);
 
 }
 

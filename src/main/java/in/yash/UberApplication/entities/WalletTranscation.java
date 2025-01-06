@@ -3,13 +3,17 @@ package in.yash.UberApplication.entities;
 import in.yash.UberApplication.entities.enums.TransactionType;
 import in.yash.UberApplication.entities.enums.TranscationMethod;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class WalletTranscation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

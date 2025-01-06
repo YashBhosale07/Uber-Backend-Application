@@ -1,4 +1,5 @@
 package in.yash.UberApplication.entities;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import in.yash.UberApplication.entities.enums.PaymentMethod;
 import in.yash.UberApplication.entities.enums.RideStatus;

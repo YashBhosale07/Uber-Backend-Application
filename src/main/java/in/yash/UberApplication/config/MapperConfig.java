@@ -1,4 +1,5 @@
 package in.yash.UberApplication.config;
+
 import in.yash.UberApplication.dto.PointDto;
 import in.yash.UberApplication.utils.GeometryUtil;
 import lombok.NoArgsConstructor;
@@ -12,16 +13,16 @@ import org.springframework.context.annotation.Configuration;
 public class MapperConfig {
 
     @Bean
-    public ModelMapper modelMapper(){
-        ModelMapper mapper=new ModelMapper();
-        mapper.typeMap(PointDto.class,Point.class).setConverter(context->{
-            PointDto pointDto=context.getSource();
+    public ModelMapper modelMapper() {
+        ModelMapper mapper = new ModelMapper();
+        mapper.typeMap(PointDto.class, Point.class).setConverter(context -> {
+            PointDto pointDto = context.getSource();
             return GeometryUtil.createPoint(pointDto);
 
         });
-        mapper.typeMap(Point.class,PointDto.class).setConverter(context->{
-            Point point=context.getSource();
-            double coordinates[]={
+        mapper.typeMap(Point.class, PointDto.class).setConverter(context -> {
+            Point point = context.getSource();
+            double[] coordinates = {
                     point.getX(),
                     point.getY()
             };

@@ -1,6 +1,6 @@
 package in.yash.UberApplication.exceptions;
 
-public class RideException extends RuntimeException{
+public class RideException extends RuntimeException {
     public RideException() {
     }
 
