@@ -30,8 +30,9 @@ public class WalletServiceImpl implements WalletService {
     @Override
     @Transactional
     public Wallet addMoneyToWallet(User user, Double amount, String transactionId, Ride ride,TranscationMethod transcationMethod) {
-        Wallet wallet=walletRepository.findByUser(user)
-                .orElseThrow(()->new ResourceNotFoundException("Wallet not found for user with id "+user.getId()));
+        System.out.println(user.getId());
+        Wallet wallet=findWalletByUser(user);
+
         Double alreadyExitsAmount=wallet.getBalance();
         wallet.setBalance(amount+alreadyExitsAmount);
         WalletTranscation walletTranscation=WalletTranscation.builder()
@@ -49,8 +50,7 @@ public class WalletServiceImpl implements WalletService {
     @Override
     @Transactional
     public Wallet deductMoenyFromWallet(User user, Double amount,String transactionId, Ride ride,TranscationMethod transcationMethod) {
-        Wallet wallet=walletRepository.findByUser(user)
-                .orElseThrow(()->new ResourceNotFoundException("Wallet not found for user with id "+user.getId()));
+        Wallet wallet=findWalletByUser(user);
         wallet.setBalance(wallet.getBalance()-amount);
         WalletTranscation walletTranscation=WalletTranscation.builder()
                 .transcationId(transactionId)
@@ -60,7 +60,7 @@ public class WalletServiceImpl implements WalletService {
                 .transcationMethod(transcationMethod)
                 .amount(amount)
                 .build();
-        walletTranscationService.createNewWalletTrascation(walletTranscation);
+        wallet.getTranscations().add(walletTranscation) ;
         return walletRepository.save(wallet);
     }
 
@@ -83,7 +83,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet findByUser(User user) {
+    public Wallet findWalletByUser(User user) {
         return walletRepository.findByUser(user)
                 .orElseThrow(()->new ResourceNotFoundException("Wallet not found for user with id "+user.getId()));
     }

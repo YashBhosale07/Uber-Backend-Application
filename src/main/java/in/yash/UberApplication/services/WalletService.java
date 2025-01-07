@@ -15,6 +15,6 @@ public interface WalletService {
     Wallet findWalletById(Long walletId);
     Wallet createNewWallet(User user);
 
-    Wallet findByUser(User user);
+    Wallet findWalletByUser(User user);
 
 }

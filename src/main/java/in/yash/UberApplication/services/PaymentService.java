@@ -6,7 +6,7 @@ import in.yash.UberApplication.entities.enums.PaymentStatus;
 
 public interface PaymentService {
 
-    void processPayment(Payment payment);
+    void processPayment(Ride ride);
 
     Payment createNewPayment(Ride ride);
 

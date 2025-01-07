@@ -3,6 +3,7 @@ package in.yash.UberApplication.services.Impl;
 import in.yash.UberApplication.entities.Payment;
 import in.yash.UberApplication.entities.Ride;
 import in.yash.UberApplication.entities.enums.PaymentStatus;
+import in.yash.UberApplication.exceptions.ResourceNotFoundException;
 import in.yash.UberApplication.repositories.PaymentRepository;
 import in.yash.UberApplication.services.PaymentService;
 import in.yash.UberApplication.services.PaymentStrategyManager;
@@ -18,7 +19,9 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentStrategyManager paymentStrategyManager;
 
     @Override
-    public void processPayment(Payment payment) {
+    public void processPayment(Ride ride) {
+        Payment payment=paymentRepository.findByRide(ride)
+                .orElseThrow(()->new ResourceNotFoundException("Payment not found for ride "+ride.getId()));
         paymentStrategyManager.paymentStrategy(payment.getPaymentMethod()).processPayment(payment);
     }
 
