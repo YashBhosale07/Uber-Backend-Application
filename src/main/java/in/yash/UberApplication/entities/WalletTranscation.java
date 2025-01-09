@@ -27,7 +27,7 @@ public class WalletTranscation {
     @Enumerated(EnumType.STRING)
     private TranscationMethod transcationMethod;
 
-    @OneToOne
+    @ManyToOne
     private Ride ride;
 
     private String transcationId;

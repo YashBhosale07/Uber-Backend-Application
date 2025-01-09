@@ -18,7 +18,6 @@ public class MapperConfig {
         mapper.typeMap(PointDto.class, Point.class).setConverter(context -> {
             PointDto pointDto = context.getSource();
             return GeometryUtil.createPoint(pointDto);
-
         });
         mapper.typeMap(Point.class, PointDto.class).setConverter(context -> {
             Point point = context.getSource();

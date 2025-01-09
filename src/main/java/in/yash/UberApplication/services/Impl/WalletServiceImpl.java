@@ -1,7 +1,5 @@
 package in.yash.UberApplication.services.Impl;
 
-import in.yash.UberApplication.dto.RideDto;
-import in.yash.UberApplication.dto.WalletTranscationDto;
 import in.yash.UberApplication.entities.Ride;
 import in.yash.UberApplication.entities.User;
 import in.yash.UberApplication.entities.Wallet;
@@ -29,7 +27,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public Wallet addMoneyToWallet(User user, Double amount, String transactionId, Ride ride,TranscationMethod transcationMethod) {
+    public void addMoneyToWallet(User user, Double amount, String transactionId, Ride ride, TranscationMethod transcationMethod) {
         System.out.println(user.getId());
         Wallet wallet=findWalletByUser(user);
 
@@ -44,12 +42,12 @@ public class WalletServiceImpl implements WalletService {
                 .amount(amount)
                 .build();
         walletTranscationService.createNewWalletTrascation(walletTranscation);
-        return walletRepository.save(wallet);
+        walletRepository.save(wallet);
     }
 
     @Override
     @Transactional
-    public Wallet deductMoenyFromWallet(User user, Double amount,String transactionId, Ride ride,TranscationMethod transcationMethod) {
+    public void deductMoenyFromWallet(User user, Double amount, String transactionId, Ride ride, TranscationMethod transcationMethod) {
         Wallet wallet=findWalletByUser(user);
         wallet.setBalance(wallet.getBalance()-amount);
         WalletTranscation walletTranscation=WalletTranscation.builder()
@@ -61,7 +59,7 @@ public class WalletServiceImpl implements WalletService {
                 .amount(amount)
                 .build();
         wallet.getTranscations().add(walletTranscation) ;
-        return walletRepository.save(wallet);
+        walletRepository.save(wallet);
     }
 
     @Override
@@ -76,10 +74,10 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet createNewWallet(User user) {
+    public void createNewWallet(User user) {
         Wallet wallet=new Wallet();
         wallet.setUser(user);
-        return walletRepository.save(wallet);
+        walletRepository.save(wallet);
     }
 
     @Override

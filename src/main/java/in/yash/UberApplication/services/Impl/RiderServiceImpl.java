@@ -61,6 +61,7 @@ public class RiderServiceImpl implements RiderService {
     }
 
     @Override
+    @Transactional
     public RideDto cancelRide(Long rideId) {
         Rider rider = getCurrentRider();
         Ride ride = rideService.getRideById(rideId);
@@ -76,7 +77,12 @@ public class RiderServiceImpl implements RiderService {
     }
 
     @Override
+    @Transactional
     public DriverDto rateDriver(Long rideId, Integer rating) {
+        Ride ride=rideService.getRideById(rideId);
+        Driver driver=ride.getDriver();
+        Double alreadyExitsRating=driver.getRating();
+
         return null;
     }
 
