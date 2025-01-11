@@ -62,6 +62,18 @@ public class RideServiceImpl implements RideService {
         return rideRepository.findByDriver(driver, pageRequest);
     }
 
+    @Override
+    public Ride updateDriverRatingStatus(Ride ride, boolean status) {
+        ride.setRateDriver(true);
+        return rideRepository.save(ride);
+    }
+
+    @Override
+    public void updateRiderRatingStatus(Ride ride, boolean b) {
+        ride.setRateRider(b);
+        rideRepository.save(ride);
+    }
+
     private String generateRandomOtp() {
         Random random = new Random();
         int otp = random.nextInt(10000);

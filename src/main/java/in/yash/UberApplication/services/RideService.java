@@ -21,5 +21,8 @@ public interface RideService {
 
     Page<Ride> getAllRidesOfDriver(Driver driver, PageRequest pageRequest);
 
+    Ride updateDriverRatingStatus(Ride ride,boolean status);
+
+    void updateRiderRatingStatus(Ride ride, boolean b);
 }
 

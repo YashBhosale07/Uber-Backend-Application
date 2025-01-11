@@ -1,9 +1,7 @@
 package in.yash.UberApplication.services;
 
-import in.yash.UberApplication.dto.DriverDto;
-import in.yash.UberApplication.dto.RideDto;
-import in.yash.UberApplication.dto.RideRequestDto;
-import in.yash.UberApplication.dto.RiderDto;
+import in.yash.UberApplication.dto.*;
+import in.yash.UberApplication.entities.Ride;
 import in.yash.UberApplication.entities.Rider;
 import in.yash.UberApplication.entities.User;
 import org.springframework.data.domain.Page;
@@ -14,7 +12,7 @@ public interface RiderService {
 
     RideDto cancelRide(Long rideId);
 
-    DriverDto rateDriver(Long rideId, Integer rating);
+    RatingDto rateDriver(Long rideId, Double rating);
 
     RiderDto getMyProfile();
 
@@ -23,4 +21,6 @@ public interface RiderService {
     Rider createNewRider(User user);
 
     Rider getCurrentRider();
+
+
 }

@@ -26,11 +26,11 @@ public class Ride {
     @CreationTimestamp
     private LocalDateTime createdTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonManagedReference
     private Rider rider;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonManagedReference
     private Driver driver;
 
@@ -47,6 +47,10 @@ public class Ride {
     private LocalDateTime endedAt;
 
     private String otp;
+
+    private boolean rateDriver=false;
+
+    private boolean rateRider=false;
 
 
 }

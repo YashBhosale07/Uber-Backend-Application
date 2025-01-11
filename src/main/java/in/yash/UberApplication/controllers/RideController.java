@@ -1,6 +1,6 @@
 package in.yash.UberApplication.controllers;
 
-import in.yash.UberApplication.dto.DriverDto;
+import in.yash.UberApplication.dto.RatingDto;
 import in.yash.UberApplication.dto.RideDto;
 import in.yash.UberApplication.dto.RideRequestDto;
 import in.yash.UberApplication.dto.RiderDto;
@@ -28,8 +28,8 @@ public class RideController {
         return ResponseEntity.ok(riderService.cancelRide(rideId));
     }
 
-    @PostMapping("/rateDriver")
-    public ResponseEntity<DriverDto>rateDriver(Long rideId,Integer rating){
+    @PostMapping("/rateDriver/{rideId}/{rating}")
+    public ResponseEntity<RatingDto>rateDriver(@PathVariable Long rideId, @PathVariable Double rating){
         return ResponseEntity.ok(riderService.rateDriver(rideId,rating));
     }
 

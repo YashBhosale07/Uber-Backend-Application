@@ -1,6 +1,7 @@
 package in.yash.UberApplication.services;
 
 import in.yash.UberApplication.dto.DriverDto;
+import in.yash.UberApplication.dto.RatingDto;
 import in.yash.UberApplication.dto.RideDto;
 import in.yash.UberApplication.dto.RiderDto;
 import in.yash.UberApplication.entities.Driver;
@@ -16,12 +17,13 @@ public interface DriverService {
 
     RideDto endRide(Long rideId);
 
-    RiderDto rateRider(Long rideId, Double rating);
+    RatingDto rateRider(Long rideId, Double rating);
 
     DriverDto getMyProfile();
 
     Page<RideDto> getMyAllRides(PageRequest pageRequest);
 
     void updateDriverAvailability(Driver driver, boolean available);
+
 
 }

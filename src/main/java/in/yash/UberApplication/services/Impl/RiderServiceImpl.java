@@ -1,14 +1,17 @@
 package in.yash.UberApplication.services.Impl;
 
-import in.yash.UberApplication.dto.DriverDto;
+
+import in.yash.UberApplication.dto.RatingDto;
 import in.yash.UberApplication.dto.RideDto;
 import in.yash.UberApplication.dto.RideRequestDto;
 import in.yash.UberApplication.dto.RiderDto;
 import in.yash.UberApplication.entities.*;
 import in.yash.UberApplication.entities.enums.RideRequestStatus;
 import in.yash.UberApplication.entities.enums.RideStatus;
+import in.yash.UberApplication.exceptions.DriverRatingException;
 import in.yash.UberApplication.exceptions.ResourceNotFoundException;
 import in.yash.UberApplication.exceptions.RideException;
+import in.yash.UberApplication.repositories.RideRepository;
 import in.yash.UberApplication.repositories.RideRequestRepository;
 import in.yash.UberApplication.repositories.RiderRepository;
 import in.yash.UberApplication.services.DriverService;
@@ -44,6 +47,9 @@ public class RiderServiceImpl implements RiderService {
 
     @Autowired
     private DriverService driverService;
+    @Autowired
+    private RideRepository rideRepository;
+
 
     @Override
     @Transactional
@@ -78,13 +84,32 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     @Transactional
-    public DriverDto rateDriver(Long rideId, Integer rating) {
-        Ride ride=rideService.getRideById(rideId);
-        Driver driver=ride.getDriver();
-        Double alreadyExitsRating=driver.getRating();
+    public RatingDto rateDriver(Long rideId, Double rating) {
+        Ride ride = rideService.getRideById(rideId);
+        if (ride.isRateDriver()) {
+            throw new DriverRatingException("Driver has already been rated for this ride.");
+        }
+        Driver driver = ride.getDriver();
+        if (!ride.getRideStatus().equals(RideStatus.ENDED)) {
+            throw new DriverRatingException("Ride has not been completed yet. You can rate the driver only after the ride is completed.");
+        }
 
-        return null;
+        Long totalRatingReceivedTillNow = (driver.getTotalRatingReceived() == null) ? 0L : driver.getTotalRatingReceived();
+        Long totalRatingReceived = totalRatingReceivedTillNow + 1;
+
+        Double currentRating = (driver.getRating() == null) ? 0.0 : driver.getRating();
+        Double newRating = ((currentRating * totalRatingReceivedTillNow) + rating) / totalRatingReceived;
+
+        driver.setTotalRatingReceived(totalRatingReceived);
+        driver.setRating(newRating);
+
+        rideService.updateDriverRatingStatus(ride, true);
+        RatingDto ratingDto=new RatingDto();
+        ratingDto.setRating(newRating);
+        ratingDto.setMessage("Sucessfully Rated the driver");
+        return ratingDto;
     }
+
 
     @Override
     public RiderDto getMyProfile() {
@@ -103,10 +128,10 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public Rider createNewRider(User user) {
-        Rider rider = Rider.builder()
-                .user(user)
-                .rating(0.0)
-                .build();
+        Rider rider =new Rider();
+        rider.setUser(user);
+        rider.setRating(0.0);
+        rider.setTotalRatingReceived(0L);
         return riderRepository.save(rider);
     }
 
@@ -116,4 +141,5 @@ public class RiderServiceImpl implements RiderService {
         System.out.println(rider);
         return rider;
     }
+
 }

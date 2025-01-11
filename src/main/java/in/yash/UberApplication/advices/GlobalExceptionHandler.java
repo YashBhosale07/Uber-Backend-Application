@@ -63,6 +63,24 @@ public class GlobalExceptionHandler {
         return buildErrorResponseEntity(apiError);
     }
 
+    @ExceptionHandler(DriverRatingException.class)
+    public ResponseEntity<ApiResponse<?>> handleDriverRatingException(DriverRatingException driverRatingException) {
+        ApiError apiError = ApiError.builder()
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .message(driverRatingException.getMessage())
+                .build();
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(RiderRatingException.class)
+    public ResponseEntity<ApiResponse<?>> handleRiderRatingException(RiderRatingException riderRatingException) {
+        ApiError apiError = ApiError.builder()
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .message(riderRatingException.getMessage())
+                .build();
+        return buildErrorResponseEntity(apiError);
+    }
+
 
     private ResponseEntity<ApiResponse<?>> buildErrorResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(new ApiResponse<>(apiError), apiError.getHttpStatus());

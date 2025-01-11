@@ -1,9 +1,6 @@
 package in.yash.UberApplication.controllers;
 
-import in.yash.UberApplication.dto.DriverDto;
-import in.yash.UberApplication.dto.RideDto;
-import in.yash.UberApplication.dto.RideStartDto;
-import in.yash.UberApplication.dto.RiderDto;
+import in.yash.UberApplication.dto.*;
 import in.yash.UberApplication.services.DriverService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,7 +31,7 @@ public class DriverController {
     }
 
     @PostMapping("rateRider/{rideId}/{rating}")
-    public ResponseEntity<RiderDto>rateRider(@PathVariable Long rideId, @PathVariable double rating){
+    public ResponseEntity<RatingDto>rateRider(@PathVariable Long rideId, @PathVariable double rating){
         return ResponseEntity.ok(driverService.rateRider(rideId,rating));
     }
 
