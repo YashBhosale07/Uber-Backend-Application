@@ -3,12 +3,17 @@ package in.yash.UberApplication.entities;
 
 import in.yash.UberApplication.entities.enums.Role;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "app_user",indexes = {
+        @Index(name = "idx_user_email",columnList = "email")
+})
 @Setter
 @Getter
 @NoArgsConstructor

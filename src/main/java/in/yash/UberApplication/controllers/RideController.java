@@ -8,6 +8,7 @@ import in.yash.UberApplication.services.RiderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,8 @@ public class RideController {
     @GetMapping("/getAllRides")
     public ResponseEntity<Page<RideDto>>getAllRides(@RequestParam(defaultValue = "0")Integer page,
                                                     @RequestParam(defaultValue = "10")Integer pageSize){
-        Page<RideDto>rides=riderService.getMyAllRides(PageRequest.of(page,pageSize));
+        Page<RideDto>rides=riderService.getMyAllRides(PageRequest.of(page,pageSize,
+                Sort.by(Sort.Direction.DESC,"createdTime","id")));
         return ResponseEntity.ok (rides);
     }
 

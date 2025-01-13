@@ -5,13 +5,19 @@ import in.yash.UberApplication.entities.enums.PaymentMethod;
 import in.yash.UberApplication.entities.enums.RideRequestStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
+@Table(indexes = {
+        @Index(name = "idx_ride_request_rider",columnList = "rider_id")
+})
 public class RideRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

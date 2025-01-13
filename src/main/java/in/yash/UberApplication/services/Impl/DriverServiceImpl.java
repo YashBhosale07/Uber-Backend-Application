@@ -3,7 +3,6 @@ package in.yash.UberApplication.services.Impl;
 import in.yash.UberApplication.dto.DriverDto;
 import in.yash.UberApplication.dto.RatingDto;
 import in.yash.UberApplication.dto.RideDto;
-import in.yash.UberApplication.dto.RiderDto;
 import in.yash.UberApplication.entities.Driver;
 import in.yash.UberApplication.entities.Ride;
 import in.yash.UberApplication.entities.RideRequest;
@@ -116,25 +115,7 @@ public class DriverServiceImpl implements DriverService {
     @Override
     @Transactional
     public RatingDto rateRider(Long rideId, Double rating) {
-        Ride ride=rideService.getRideById(rideId);
-        if(!ride.getRideStatus().equals(RideStatus.ENDED)){
-            throw new RiderRatingException("Ride has not completed yet, Rider can be rated after the Ride has been completed");
-        }
-        if(ride.isRateRider()){
-            throw new RiderRatingException("Rider has been already rated");
-        }
-        Rider rider=ride.getRider();
-        Long totalRatingReceivedTillNow=(rider.getTotalRatingReceived() == null) ? 0L : rider.getTotalRatingReceived();
-        Long totalRatingReceived = totalRatingReceivedTillNow + 1;
-        Double currentRating = (rider.getRating() == null) ? 0.0 : rider.getRating();
-        Double newRating = ((currentRating * totalRatingReceivedTillNow) + rating) / totalRatingReceived;
-        rider.setTotalRatingReceived(totalRatingReceived);
-        rider.setRating(newRating);
-        rideService.updateRiderRatingStatus(ride,true);
-        RatingDto ratingDto=new RatingDto();
-        ratingDto.setRating(newRating);
-        ratingDto.setMessage("Sucessfully Rated the driver");
-        return ratingDto;
+        return null;
     }
 
     @Override
@@ -155,6 +136,11 @@ public class DriverServiceImpl implements DriverService {
     public void updateDriverAvailability(Driver driver, boolean available) {
         driver.setAvailable(true);
         driverRepository.save(driver);
+    }
+
+    @Override
+    public Driver createNewDriver(Driver driver) {
+        return driverRepository.save(driver);
     }
 
 

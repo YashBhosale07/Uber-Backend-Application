@@ -1,10 +1,14 @@
 package in.yash.UberApplication.controllers;
 
-import in.yash.UberApplication.dto.*;
+import in.yash.UberApplication.dto.DriverDto;
+import in.yash.UberApplication.dto.RatingDto;
+import in.yash.UberApplication.dto.RideDto;
+import in.yash.UberApplication.dto.RideStartDto;
 import in.yash.UberApplication.services.DriverService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +47,13 @@ public class DriverController {
     @GetMapping("/getAllRides")
     public ResponseEntity<Page<RideDto>>getAllRides(@RequestParam(defaultValue = "0")Integer page,
                                                     @RequestParam(defaultValue = "10")Integer size){
-        return ResponseEntity.ok(driverService.getMyAllRides(PageRequest.of(page,size)));
+        return ResponseEntity.ok(driverService.getMyAllRides(PageRequest.of(page,size,
+                Sort.by(Sort.Direction.DESC,"createdTime","id"))));
+    }
+
+    @PostMapping("/cancelRide/{rideId}")
+    public ResponseEntity<RideDto>cancelRide(@PathVariable Long rideId){
+        return ResponseEntity.ok(driverService.cancelRide(rideId));
     }
 
 

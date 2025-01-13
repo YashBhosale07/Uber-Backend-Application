@@ -6,7 +6,6 @@ import in.yash.UberApplication.entities.Rider;
 import in.yash.UberApplication.entities.enums.PaymentStatus;
 import in.yash.UberApplication.entities.enums.TranscationMethod;
 import in.yash.UberApplication.repositories.PaymentRepository;
-import in.yash.UberApplication.services.PaymentService;
 import in.yash.UberApplication.services.WalletService;
 import in.yash.UberApplication.strategies.PaymentStrategy;
 import lombok.RequiredArgsConstructor;

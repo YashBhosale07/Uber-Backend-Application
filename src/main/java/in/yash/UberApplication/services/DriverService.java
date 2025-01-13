@@ -3,7 +3,6 @@ package in.yash.UberApplication.services;
 import in.yash.UberApplication.dto.DriverDto;
 import in.yash.UberApplication.dto.RatingDto;
 import in.yash.UberApplication.dto.RideDto;
-import in.yash.UberApplication.dto.RiderDto;
 import in.yash.UberApplication.entities.Driver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,5 +24,5 @@ public interface DriverService {
 
     void updateDriverAvailability(Driver driver, boolean available);
 
-
+    Driver createNewDriver(Driver driver);
 }

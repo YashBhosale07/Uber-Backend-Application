@@ -14,9 +14,9 @@ import in.yash.UberApplication.exceptions.RideException;
 import in.yash.UberApplication.repositories.RideRepository;
 import in.yash.UberApplication.repositories.RideRequestRepository;
 import in.yash.UberApplication.repositories.RiderRepository;
-import in.yash.UberApplication.services.DriverService;
 import in.yash.UberApplication.services.RideService;
 import in.yash.UberApplication.services.RiderService;
+import in.yash.UberApplication.services.UpdateDriverAvailability;
 import in.yash.UberApplication.strategies.RideStrategyManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class RiderServiceImpl implements RiderService {
     private RideService rideService;
 
     @Autowired
-    private DriverService driverService;
+    private UpdateDriverAvailability updateDriverAvailability;
     @Autowired
     private RideRepository rideRepository;
 
@@ -78,36 +78,14 @@ public class RiderServiceImpl implements RiderService {
             throw new RideException("Ride cannot be cancelled");
         }
         rideService.updateRideStatus(ride, RideStatus.CANCELLED);
-        driverService.updateDriverAvailability(ride.getDriver(), true);
+        updateDriverAvailability.updateDriverAvailability(ride.getDriver(),true);
         return modelMapper.map(ride, RideDto.class);
     }
 
     @Override
     @Transactional
     public RatingDto rateDriver(Long rideId, Double rating) {
-        Ride ride = rideService.getRideById(rideId);
-        if (ride.isRateDriver()) {
-            throw new DriverRatingException("Driver has already been rated for this ride.");
-        }
-        Driver driver = ride.getDriver();
-        if (!ride.getRideStatus().equals(RideStatus.ENDED)) {
-            throw new DriverRatingException("Ride has not been completed yet. You can rate the driver only after the ride is completed.");
-        }
-
-        Long totalRatingReceivedTillNow = (driver.getTotalRatingReceived() == null) ? 0L : driver.getTotalRatingReceived();
-        Long totalRatingReceived = totalRatingReceivedTillNow + 1;
-
-        Double currentRating = (driver.getRating() == null) ? 0.0 : driver.getRating();
-        Double newRating = ((currentRating * totalRatingReceivedTillNow) + rating) / totalRatingReceived;
-
-        driver.setTotalRatingReceived(totalRatingReceived);
-        driver.setRating(newRating);
-
-        rideService.updateDriverRatingStatus(ride, true);
-        RatingDto ratingDto=new RatingDto();
-        ratingDto.setRating(newRating);
-        ratingDto.setMessage("Sucessfully Rated the driver");
-        return ratingDto;
+        return null;
     }
 
 
