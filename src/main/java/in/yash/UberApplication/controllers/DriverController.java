@@ -35,7 +35,7 @@ public class DriverController {
     }
 
     @PostMapping("rateRider/{rideId}/{rating}")
-    public ResponseEntity<RatingDto>rateRider(@PathVariable Long rideId, @PathVariable double rating){
+    public ResponseEntity<RatingDto>rateRider(@PathVariable Long rideId, @PathVariable Integer rating){
         return ResponseEntity.ok(driverService.rateRider(rideId,rating));
     }
 

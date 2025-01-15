@@ -75,8 +75,6 @@ public class AuthServiceImpl implements AuthService {
         if(user.getRoles().contains(DRIVER)) throw new RuntimeConflictException("User with id "+onBoardNewDriverDto.getUserId()+" is already a driver");
         Driver driver=new Driver();
         driver.setUser(user);
-        driver.setTotalRatingReceived(0L);
-        driver.setRating(0.0);
         driver.setVehicleNumber(onBoardNewDriverDto.getVehicleNumber());
         driver.setAvailable(true);
         driver.setDrivingLicenceNumber(onBoardNewDriverDto.getDrivingLicenceNumber());

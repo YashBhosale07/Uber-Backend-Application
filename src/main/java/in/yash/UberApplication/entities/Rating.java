@@ -27,6 +27,11 @@ public class Rating {
     private Driver driver;
 
     private Integer driverRating;
+
     private Integer riderRating;
+
+    private Boolean riderRatingStatus=false;
+
+    private Boolean driverRatingStatus=false;
 
 }

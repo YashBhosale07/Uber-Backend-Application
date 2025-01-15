@@ -4,9 +4,9 @@ import in.yash.UberApplication.dto.DriverDto;
 import in.yash.UberApplication.dto.RatingDto;
 import in.yash.UberApplication.dto.RideDto;
 import in.yash.UberApplication.entities.Driver;
+import in.yash.UberApplication.entities.Rating;
 import in.yash.UberApplication.entities.Ride;
 import in.yash.UberApplication.entities.RideRequest;
-import in.yash.UberApplication.entities.Rider;
 import in.yash.UberApplication.entities.enums.RideRequestStatus;
 import in.yash.UberApplication.entities.enums.RideStatus;
 import in.yash.UberApplication.exceptions.*;
@@ -36,7 +36,7 @@ public class DriverServiceImpl implements DriverService {
 
     private final PaymentService paymentService;
 
-    private final RiderService riderService;
+    private final RatingService ratingService;
 
     @Override
     public RideDto acceptRide(Long rideRequestId) {
@@ -89,6 +89,11 @@ public class DriverServiceImpl implements DriverService {
             throw new OtpInvalidException("Otp is invalid");
         }
         ride.setStartedAt(LocalDateTime.now());
+        Rating rating=new Rating();
+        rating.setRide(ride);
+        rating.setDriver(driver);
+        rating.setRider(ride.getRider());
+        ratingService.saveRating(rating);
         Ride savedRide = rideService.updateRideStatus(ride, RideStatus.ONGOING);
         paymentService.createNewPayment(savedRide);
         return modelMapper.map(savedRide, RideDto.class);
@@ -114,8 +119,11 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional
-    public RatingDto rateRider(Long rideId, Double rating) {
-        return null;
+    public RatingDto rateRider(Long rideId, Integer rating) {
+        Ride ride = rideService.getRideById(rideId);
+        Double totalRating = ratingService.rateRider(ride, rating);
+        String message="Total rating of rider is :"+totalRating;
+        return RatingDto.builder().message(message).build();
     }
 
     @Override

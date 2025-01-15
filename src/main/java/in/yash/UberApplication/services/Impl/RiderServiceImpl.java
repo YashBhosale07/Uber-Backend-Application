@@ -8,12 +8,12 @@ import in.yash.UberApplication.dto.RiderDto;
 import in.yash.UberApplication.entities.*;
 import in.yash.UberApplication.entities.enums.RideRequestStatus;
 import in.yash.UberApplication.entities.enums.RideStatus;
-import in.yash.UberApplication.exceptions.DriverRatingException;
 import in.yash.UberApplication.exceptions.ResourceNotFoundException;
 import in.yash.UberApplication.exceptions.RideException;
 import in.yash.UberApplication.repositories.RideRepository;
 import in.yash.UberApplication.repositories.RideRequestRepository;
 import in.yash.UberApplication.repositories.RiderRepository;
+import in.yash.UberApplication.services.RatingService;
 import in.yash.UberApplication.services.RideService;
 import in.yash.UberApplication.services.RiderService;
 import in.yash.UberApplication.services.UpdateDriverAvailability;
@@ -47,8 +47,12 @@ public class RiderServiceImpl implements RiderService {
 
     @Autowired
     private UpdateDriverAvailability updateDriverAvailability;
+
     @Autowired
     private RideRepository rideRepository;
+
+    @Autowired
+    private RatingService ratingService;
 
 
     @Override
@@ -84,8 +88,11 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     @Transactional
-    public RatingDto rateDriver(Long rideId, Double rating) {
-        return null;
+    public RatingDto rateDriver(Long rideId, Integer rating) {
+        Ride savedRide = rideRepository.findById(rideId).orElseThrow(()->new ResourceNotFoundException("Ride not found"));
+        Double totalRating = ratingService.rateDriver(savedRide, rating);
+        String message="Total rating of rider is :"+totalRating;
+        return RatingDto.builder().message(message).build();
     }
 
 
@@ -108,8 +115,6 @@ public class RiderServiceImpl implements RiderService {
     public Rider createNewRider(User user) {
         Rider rider =new Rider();
         rider.setUser(user);
-        rider.setRating(0.0);
-        rider.setTotalRatingReceived(0L);
         return riderRepository.save(rider);
     }
 
