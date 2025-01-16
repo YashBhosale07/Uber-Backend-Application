@@ -1,5 +1,6 @@
 package in.yash.UberApplication.services.Impl;
 
+import in.yash.UberApplication.Security.JwtService;
 import in.yash.UberApplication.dto.DriverDto;
 import in.yash.UberApplication.dto.OnBoardNewDriverDto;
 import in.yash.UberApplication.dto.SignUpDto;
@@ -20,6 +21,11 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +51,21 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private DriverService driverService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
+
     @Override
-    public String login(String email, String password) {
+    public String[] login(String email, String password) {
+       UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(email,password);
+       Authentication authentication=authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+       User user= (User) authentication.getPrincipal();
+       jwtService.generateAcessToken(user);
         return null;
     }
 
@@ -59,6 +78,7 @@ public class AuthServiceImpl implements AuthService {
         }
         User mappedUser = modelMapper.map(signUpDto, User.class);
         mappedUser.setRoles(Set.of(Role.RIDER));
+        mappedUser.setPassword(passwordEncoder.encode(mappedUser.getPassword()));
         User savedUser = userRepository.save(mappedUser);
 
         //create user related entities

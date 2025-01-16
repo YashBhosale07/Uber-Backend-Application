@@ -1,9 +1,6 @@
 package in.yash.UberApplication.controllers;
 
-import in.yash.UberApplication.dto.DriverDto;
-import in.yash.UberApplication.dto.OnBoardNewDriverDto;
-import in.yash.UberApplication.dto.SignUpDto;
-import in.yash.UberApplication.dto.UserDto;
+import in.yash.UberApplication.dto.*;
 import in.yash.UberApplication.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +25,12 @@ public class AuthController {
     @PostMapping("/onBoardNewDriver")
     public ResponseEntity<DriverDto>onBoardNewDriver(@RequestBody OnBoardNewDriverDto onBoardNewDriverDto){
         return new ResponseEntity<>(authService.onboardNewDriver(onBoardNewDriverDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<loginResponseDto>login(@RequestBody loginRequestDto loginRequestDto){
+        String[] tokens= authService.login(loginRequestDto.getEmail(),loginRequestDto.getPassword());
+        return ResponseEntity.ok(new loginResponseDto(tokens[0],tokens[1]));
     }
 
 
