@@ -1,11 +1,12 @@
 package in.yash.UberApplication.Security;
 
 import in.yash.UberApplication.entities.User;
+import in.yash.UberApplication.exceptions.InvalidAccessTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.stereotype.Service;
-
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -18,7 +19,7 @@ public class JwtService {
     }
     public String generateAcessToken(User user){
         return Jwts.builder()
-                .claim("email",user.getEmail())
+                .subject(user.getId().toString())
                 .claim("roles",user.getRoles())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis()+1000*60*10))
@@ -36,12 +37,20 @@ public class JwtService {
     }
 
     public Long getUserIdFromToken(String token){
-        Claims claims=Jwts.parser()
-                .verifyWith(secretKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return Long.valueOf(claims.getId());
+        try{
+            Claims claims=Jwts.parser()
+                    .verifyWith(secretKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            System.out.println(claims.getSubject());
+            return Long.parseLong(claims.getSubject());
+        }catch (SignatureException e){
+            throw new InvalidAccessTokenException("Invalid Jwt Signature");
+        }catch (Exception e){
+            throw new InvalidAccessTokenException("Error parsing the jwt");
+        }
+
     }
 
 }

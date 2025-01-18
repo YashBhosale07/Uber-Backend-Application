@@ -81,6 +81,15 @@ public class GlobalExceptionHandler {
         return buildErrorResponseEntity(apiError);
     }
 
+    @ExceptionHandler(InvalidAccessTokenException.class)
+    public ResponseEntity<ApiResponse<?>> handleInvalidAccessTokenException(InvalidAccessTokenException invalidAccessTokenException) {
+        ApiError apiError = ApiError.builder()
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .message(invalidAccessTokenException.getMessage())
+                .build();
+        return buildErrorResponseEntity(apiError);
+    }
+
 
     private ResponseEntity<ApiResponse<?>> buildErrorResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(new ApiResponse<>(apiError), apiError.getHttpStatus());

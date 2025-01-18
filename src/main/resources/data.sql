@@ -17,18 +17,18 @@ INSERT INTO user_roles (user_id, roles) VALUES
 
 
 
-INSERT INTO rider (id, user_id, rating) VALUES
-(1, 1, 4.9);
+INSERT INTO rider (user_id, rating) VALUES
+( 1, 4.9);
 
 
 
-INSERT INTO driver (id, user_id, rating, available, current_location) VALUES
-(2, 2, 4.5, true, ST_PointFromText('POINT(74.1313 28.244123)', 4326)), -- Within ~1.5 km
-(3, 3, 4.7, true, ST_PointFromText('POINT(74.1103 28.214123)', 4326)), -- Within ~3.0 km
-(4, 4, 4.9, true, ST_PointFromText('POINT(74.1413 28.224123)', 4326)), -- Within ~14 km
-(5, 5, 3.7, true, ST_PointFromText('POINT(74.2713 28.324123)', 4326)), -- ~18 km
-(6, 6, 4.8, true, ST_PointFromText('POINT(74.2913 28.304123)', 4326)); -- ~19.5 km
+INSERT INTO driver (user_id, rating, available, current_location) VALUES
+(2, 4.5, true, ST_PointFromText('POINT(74.1313 28.244123)', 4326)), -- Within ~1.5 km
+(3, 4.7, true, ST_PointFromText('POINT(74.1103 28.214123)', 4326)), -- Within ~3.0 km
+(4, 4.9, true, ST_PointFromText('POINT(74.1413 28.224123)', 4326)), -- Within ~14 km
+(5, 3.7, true, ST_PointFromText('POINT(74.2713 28.324123)', 4326)), -- ~18 km
+(6, 4.8, true, ST_PointFromText('POINT(74.2913 28.304123)', 4326)); -- ~19.5 km
 
-insert into wallet (id,user_id,balance) values(1,1,100),(2,2,500);
+insert into wallet (user_id,balance) values(1,100),(2,500);
 
 

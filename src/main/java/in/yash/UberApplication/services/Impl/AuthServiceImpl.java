@@ -22,9 +22,9 @@ import org.locationtech.jts.geom.Point;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,11 +62,20 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String[] login(String email, String password) {
-       UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(email,password);
-       Authentication authentication=authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-       User user= (User) authentication.getPrincipal();
-       jwtService.generateAcessToken(user);
-        return null;
+        Authentication authentication=null;
+        try{
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(email,password);
+            authentication=authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        }catch (BadCredentialsException e){
+            throw new BadCredentialsException("Invalid Username and Password");
+        }
+        if(authentication==null || !authentication.isAuthenticated()){
+            throw new RuntimeException("Authentication failed");
+        }
+        User user= (User) authentication.getPrincipal();
+        String acessToken=jwtService.generateAcessToken(user);
+        String refreshToken=jwtService.generateRefreshToken(user);
+        return new String[]{acessToken,refreshToken};
     }
 
     @Override
@@ -83,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
 
         //create user related entities
         Rider rider = riderService.createNewRider(savedUser);
-        walletService.createNewWallet(user);
+        walletService.createNewWallet(savedUser);
 
         return modelMapper.map(savedUser, UserDto.class);
     }
@@ -107,6 +116,6 @@ public class AuthServiceImpl implements AuthService {
         user.getRoles().add(DRIVER);
         userRepository.save(user);
         Driver savedDriver=driverService.createNewDriver(driver);
-        return modelMapper.map(driver,DriverDto.class);
+        return modelMapper.map(savedDriver,DriverDto.class);
     }
 }

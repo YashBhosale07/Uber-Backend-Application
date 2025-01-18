@@ -9,6 +9,7 @@ import in.yash.UberApplication.entities.enums.RideRequestStatus;
 import in.yash.UberApplication.entities.enums.RideStatus;
 import in.yash.UberApplication.exceptions.ResourceNotFoundException;
 import in.yash.UberApplication.repositories.RideRepository;
+import in.yash.UberApplication.repositories.RideRequestRepository;
 import in.yash.UberApplication.services.RideRequestService;
 import in.yash.UberApplication.services.RideService;
 import lombok.RequiredArgsConstructor;

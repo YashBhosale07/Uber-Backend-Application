@@ -13,15 +13,13 @@ import in.yash.UberApplication.exceptions.RideException;
 import in.yash.UberApplication.repositories.RideRepository;
 import in.yash.UberApplication.repositories.RideRequestRepository;
 import in.yash.UberApplication.repositories.RiderRepository;
-import in.yash.UberApplication.services.RatingService;
-import in.yash.UberApplication.services.RideService;
-import in.yash.UberApplication.services.RiderService;
-import in.yash.UberApplication.services.UpdateDriverAvailability;
+import in.yash.UberApplication.services.*;
 import in.yash.UberApplication.strategies.RideStrategyManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +52,9 @@ public class RiderServiceImpl implements RiderService {
     @Autowired
     private RatingService ratingService;
 
+    @Autowired
+    private RideRequestService rideRequestService;
+
 
     @Override
     @Transactional
@@ -74,7 +75,7 @@ public class RiderServiceImpl implements RiderService {
     @Transactional
     public RideDto cancelRide(Long rideId) {
         Rider rider = getCurrentRider();
-        Ride ride = rideService.getRideById(rideId);
+        Ride ride=rideService.getRideById(rideId);
         if (!ride.equals(ride.getRider())) {
             throw new RideException("Ride does not own this ride");
         }
@@ -120,7 +121,8 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public Rider getCurrentRider() {
-        Rider rider = riderRepository.findById(1L).orElseThrow(() -> new ResourceNotFoundException("Rider not found"));
+        User  user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Rider rider = riderRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("Driver not associated with user with id " +user.getId() ));
         System.out.println(rider);
         return rider;
     }
