@@ -55,6 +55,9 @@ public class RiderServiceImpl implements RiderService {
     @Autowired
     private RideRequestService rideRequestService;
 
+    @Autowired
+    private EmailSenderService emailSenderService;
+
 
     @Override
     @Transactional
@@ -68,6 +71,11 @@ public class RiderServiceImpl implements RiderService {
         RideRequest savedRideRequest = rideRequestRepository.save(rideRequest);
         List<Driver> nearByDrivers = rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDriver(rideRequest);
         //TODO send notification to all the drivers about this ride request
+        for (int i=0;i<nearByDrivers.size();i++){
+            Driver driver=nearByDrivers.get(i);
+            String email=driver.getUser().getEmail();
+            emailSenderService.sendEmail(email,"Near by Ride","Ride id is "+rideRequest.getId());
+        }
         return modelMapper.map(savedRideRequest, RideRequestDto.class);
     }
 
